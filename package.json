@@ -1,0 +1,22 @@
+{
+  "name": "api-dog-breeds",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "node index.ts",
+    "dev": "bun --watch index.ts",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongodb": "^6.7.0"
+  }
+}
