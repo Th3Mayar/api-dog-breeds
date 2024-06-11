@@ -52,26 +52,6 @@ app.get("/dogs/:id", async (req: Request, res: Response) => {
   }
 });
 
-app.get("/dogs/:name", async (req: Request, res: Response) => {
-  const { name } = req.params;
-
-  try {
-    const database = client.db("dogs-breeds");
-    const collection = database.collection("dogs");
-
-    const dog = await collection.findOne({ name }, { sort: { createdAt: -1 } });
-    if (!dog) {
-      res.status(404).json({ message: "Dog not found" });
-      return;
-    }
-
-    res.json(dog);
-  } catch (error) {
-    console.error("Error fetching dog from MongoDB:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
-
 const MONGODB_URL = process.env.MONGODB_URI || "";
 
 const client = new MongoClient(MONGODB_URL, {
@@ -113,12 +93,12 @@ app.post("/dogs", async (req: Request, res: Response) => {
     });
 
     res.json({
-      dogs: "Data received and saved successfully",
+      message: "Data received and saved successfully",
       data: insertResult.insertedId,
     });
   } catch (error) {
     console.error("Error inserting document into MongoDB:", error);
-    res.status(500).json({ dogs: "Internal Server Error" });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
