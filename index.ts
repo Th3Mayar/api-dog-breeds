@@ -1,14 +1,14 @@
-import express, { Request, Response } from "express";
+import exp, {type Request, type Response} from "express";
 import cors from "cors";
-import { MongoClient, InsertOneResult } from "mongodb";
+import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
 
 // Init server
 dotenv.config();
 
-const app = express();
+const app = exp();
 
-app.use(express.json());
+app.use(exp.json());
 app.use(cors());
 
 const PORT = process.env.PORT || 4000;
