@@ -6,6 +6,10 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { expressjwt } from "express-jwt";
 import apiKeyAuth from "./middlewares/authentication.js";
+import { validationResult } from "express-validator";
+import _ from "lodash";
+
+const { escape } = _;
 
 // Init server
 dotenv.config();
@@ -23,6 +27,15 @@ const authMiddleware = expressjwt({
   secret: JWT_SECRET,
   algorithms: ["HS256"],
 });
+
+// Middleware para validar la entrada
+const validateInputs = (req: Request, res: Response, next: () => void) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  next();
+};
 
 app.get("/", (req: Request, res: Response) => {
   res.json({ message: "Hello from server!" });
@@ -71,7 +84,7 @@ const userSchema = new Schema<User>({
 const UserModel = model<User>("User", userSchema);
 
 // User registration route
-app.post("/register", apiKeyAuth, async (req: Request, res: Response) => {
+app.post("/register", apiKeyAuth, validateInputs, async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
   try {
@@ -136,11 +149,11 @@ app.get("/dogs/:id", async (req: Request, res: Response) => {
 });
 
 // Protected routes
-app.post("/dogs", apiKeyAuth, authMiddleware, async (req: Request, res: Response) => {
+app.post("/dogs", apiKeyAuth, authMiddleware, validateInputs, async (req: Request, res: Response) => {
   const { name, breeds, image } = req.body;
 
   try {
-    const newDog = new DogModel({ name, breeds, image });
+    const newDog = new DogModel({ name: escape(name), breeds, image: escape(image) });
     const savedDog = await newDog.save();
 
     res.json({
@@ -153,7 +166,7 @@ app.post("/dogs", apiKeyAuth, authMiddleware, async (req: Request, res: Response
   }
 });
 
-app.delete("/dogs/:id", apiKeyAuth, authMiddleware, async (req: Request, res: Response) => {
+app.delete("/dogs/:id", authMiddleware, async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
@@ -171,7 +184,7 @@ app.delete("/dogs/:id", apiKeyAuth, authMiddleware, async (req: Request, res: Re
   }
 });
 
-app.put("/dogs/:id", apiKeyAuth, authMiddleware, async (req: Request, res: Response) => {
+app.put("/dogs/:id", authMiddleware, async (req: Request, res: Response) => {
   const { id } = req.params;
   const { name, breeds, image } = req.body;
 
