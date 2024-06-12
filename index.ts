@@ -136,7 +136,7 @@ app.get("/dogs/:id", async (req: Request, res: Response) => {
 });
 
 // Protected routes
-app.post("/dogs", authMiddleware, async (req: Request, res: Response) => {
+app.post("/dogs", apiKeyAuth, authMiddleware, async (req: Request, res: Response) => {
   const { name, breeds, image } = req.body;
 
   try {
@@ -153,7 +153,7 @@ app.post("/dogs", authMiddleware, async (req: Request, res: Response) => {
   }
 });
 
-app.delete("/dogs/:id", authMiddleware, async (req: Request, res: Response) => {
+app.delete("/dogs/:id", apiKeyAuth, authMiddleware, async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
@@ -171,7 +171,7 @@ app.delete("/dogs/:id", authMiddleware, async (req: Request, res: Response) => {
   }
 });
 
-app.put("/dogs/:id", authMiddleware, async (req: Request, res: Response) => {
+app.put("/dogs/:id", apiKeyAuth, authMiddleware, async (req: Request, res: Response) => {
   const { id } = req.params;
   const { name, breeds, image } = req.body;
 
