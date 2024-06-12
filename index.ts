@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { expressjwt } from "express-jwt";
+import apiKeyAuth from "./middleware/authentication";
 
 // Init server
 dotenv.config();
@@ -70,7 +71,7 @@ const userSchema = new Schema<User>({
 const UserModel = model<User>("User", userSchema);
 
 // User registration route
-app.post("/register", async (req: Request, res: Response) => {
+app.post("/register", apiKeyAuth, async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
   try {
