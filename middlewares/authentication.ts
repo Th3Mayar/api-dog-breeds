@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-function apiKeyAuth(req: Request, res: Response, next: NextFunction) {
+const apiKeyAuth = (req: Request, res: Response, next: NextFunction) => {
   const apiKey = req.headers["x-api-key"];
   const validApiKey = process.env.API_KEY;
 

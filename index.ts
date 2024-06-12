@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { expressjwt } from "express-jwt";
-import apiKeyAuth from "./middleware/authentication";
+import apiKeyAuth from "./middlewares/authentication.js";
 
 // Init server
 dotenv.config();
